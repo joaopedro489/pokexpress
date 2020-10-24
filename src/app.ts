@@ -1,0 +1,11 @@
+import express from "express";
+import body_parser from "body-parser";
+import router from "./routes/routes";
+import "./database/connection";
+import cors from 'cors';
+const app = express();
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended:true}));
+app.use(cors());
+app.use(router);
+app.listen(3333);
