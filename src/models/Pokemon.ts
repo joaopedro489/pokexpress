@@ -10,10 +10,13 @@ export default class  Pokemon {
     @IsAlpha()
     name: string;
     @Column()
+    @IsPositive()
     atk: number;
     @Column()
+    @IsPositive()
     hp: number;
     @Column()
+    @IsPositive()
     speed: number;
     @OneToMany(() => Trainer, trainer => trainer.favoritePokemon)
     trainers: Trainer[];

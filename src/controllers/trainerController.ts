@@ -23,7 +23,7 @@ export default{
             }
         }
         catch (err){
-            return res.status(500).json("err");
+            return res.status(500).json(err);
         }
         const trainerRepository = getRepository(Trainer);
         const trainer = trainerRepository.create({
