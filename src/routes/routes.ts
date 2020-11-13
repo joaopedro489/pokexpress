@@ -2,10 +2,10 @@ import { Router } from 'express';
 import trainerController from '../controllers/trainerController';
 import itemController from '../controllers/itemController';
 import pokemonController from '../controllers/pokemonController';
-import example from '../middlewares/example';
+//import example from '../middlewares/example';
 const router = Router();
 //exemplo de middleware
-router.use('/trainer', example);
+//router.use('/trainer', example);
 
 //Rotas treinador
 router.get('/trainer/:id', trainerController.index);

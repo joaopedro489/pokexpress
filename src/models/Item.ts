@@ -13,4 +13,5 @@ export default class  Item {
     price: number;
     @ManyToMany(() => Trainer, trainer => trainer.items)
     trainers: Trainer[];
+	cascade: ['insert','update', 'remove'];
 }

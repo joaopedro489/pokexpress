@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
 import Trainer from './Trainer';
 import { IsPositive, IsAlpha } from 'class-validator';
 
@@ -19,5 +19,7 @@ export default class  Pokemon {
     @IsPositive()
     speed: number;
     @OneToMany(() => Trainer, trainer => trainer.favoritePokemon)
-    trainers: Trainer[];
+    master: Trainer[];
+	@ManyToMany(() => Trainer, trainer => trainer.pokemon)
+    trainer: Trainer[];
 }

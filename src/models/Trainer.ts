@@ -16,14 +16,29 @@ export default class  Trainer {
     @Column()
     password: string;
     @ManyToMany(() => Item)
-    @JoinTable()
+    @JoinTable({ name: "item_trainer", joinColumn:{
+            name: 'trainerId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'itemId',
+            referencedColumnName: 'id'
+        }
+	})
     items: Item[];
     @OneToOne(() => Trainer)
     @JoinColumn()
     trainer: Trainer;
     @ManyToMany(() => Pokemon)
-    @JoinTable()
+    @JoinTable({ name: "pokemon_trainer", joinColumn: {
+            name: 'trainerId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'pokemonId',
+            referencedColumnName: 'id'
+        }})
     pokemon: Pokemon[];
-    @ManyToOne(() => Pokemon, pokemon => pokemon.trainers)
+    @ManyToOne(() => Pokemon, pokemon => pokemon.trainer)
     favoritePokemon: Pokemon;
 }

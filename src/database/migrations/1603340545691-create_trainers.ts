@@ -1,6 +1,6 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import {MigrationInterface, QueryRunner, Table, TableForeignKey} from "typeorm";
 
-export class createTrainers1603338545691 implements MigrationInterface {
+export class createTrainers1603340545691 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable( new Table ({
@@ -25,9 +25,31 @@ export class createTrainers1603338545691 implements MigrationInterface {
                 {
                     name:'password',
                     type:'varchar'
-                }
+                },
+				{
+					name:"trainerId",
+					type: 'integer',
+					isNullable: true,
+					unsigned: true
+				},
+				{
+					name:'favoritePokemonId',
+					type:'integer',
+					isNullable: true,
+					unsigned: true
+				}
             ]
         }));
+		await queryRunner.createForeignKey("trainers", new TableForeignKey({
+			columnNames: ["favoritePokemonId"],
+			referencedColumnNames: ["id"],
+			referencedTableName: "pokemon",
+		}));
+		await queryRunner.createForeignKey("trainers", new TableForeignKey({
+			columnNames: ["trainerId"],
+			referencedColumnNames: ["id"],
+			referencedTableName: "trainers",
+		}));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
