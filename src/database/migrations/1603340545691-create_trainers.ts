@@ -18,6 +18,11 @@ export class createTrainers1603340545691 implements MigrationInterface {
                     name: 'name',
                     type: 'varchar'
                 },
+				{
+                    name: 'name',
+                    type: 'varchar',
+					isUnique: true
+                },
                 {
                     name:'region',
                     type:'varchar'

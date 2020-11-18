@@ -3,7 +3,7 @@ import { Response, Request } from 'express';
 import Item from '../models/Item';
 import { validate } from 'class-validator';
 export default{
-    async createItem(req: Request, res: Response){
+    async createItem(req: Request, res: Response): Promise<Response>{
         const{
             name,
             price
@@ -33,7 +33,7 @@ export default{
         }
         return res.status(201).json(item);
     },
-    async index(req: Request, res: Response){
+    async index(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const itemRepository = getRepository(Item);
         try{
@@ -44,7 +44,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(res: Response){
+    async findAll(res: Response): Promise<Response>{
         const itemRepository = getRepository(Item);
         try{
             const items = await itemRepository.find();
@@ -54,7 +54,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async updateItem(req: Request, res: Response){
+    async updateItem(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const itemRepository = getRepository(Item);
         try{
@@ -67,7 +67,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async deleteItem(req:Request, res: Response){
+    async deleteItem(req:Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const itemRepository = getRepository(Item);
         try{

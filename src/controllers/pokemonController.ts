@@ -4,7 +4,7 @@ import Pokemon from '../models/Pokemon';
 import { validate } from 'class-validator';
 
 export default{
-    async createPokemon(req: Request, res: Response){
+    async createPokemon(req: Request, res: Response): Promise<Response>{
         const{
             name,
             atk,
@@ -40,7 +40,7 @@ export default{
         }
         return res.status(201).json(pokemon);
     },
-    async index(req: Request, res: Response){
+    async index(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const pokemonRepository = getRepository(Pokemon);
         try{
@@ -51,7 +51,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(res: Response){
+    async findAll(res: Response): Promise<Response>{
         const pokemonRepository = getRepository(Pokemon);
         try{
             const pokemons = await pokemonRepository.find();
@@ -61,7 +61,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async updatePokemon(req: Request, res: Response){
+    async updatePokemon(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const pokemonRepository = getRepository(Pokemon);
         try{
@@ -74,7 +74,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async deletePokemon(req:Request, res: Response){
+    async deletePokemon(req:Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const pokemonRepository = getRepository(Pokemon);
         try{
@@ -85,5 +85,4 @@ export default{
             return res.status(500).json(err);
         }
     }
-
 }

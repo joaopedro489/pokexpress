@@ -3,19 +3,22 @@ import { Response, Request } from 'express';
 import Trainer from '../models/Trainer';
 import  Item from "../models/Item";
 import Pokemon from "../models/Pokemon";
+import mailController from "./mailController";
 import { validate } from 'class-validator';
 
 export default{
-    async createTrainer(req: Request, res: Response){
+    async createTrainer(req: Request, res: Response): Promise<Response>{
         const{
             name,
             region,
-            password
+            password,
+			email
         } = req.body;
         let validatorTrainer = new Trainer();
         validatorTrainer.name = name;
         validatorTrainer.region = region;
         validatorTrainer.password = password;
+		validatorTrainer.email = email;
         try{
             const errors = await validate(validatorTrainer);
             if (errors.length > 0) {
@@ -29,17 +32,19 @@ export default{
         const trainer = trainerRepository.create({
             name,
             region,
-            password
+            password,
+			email
         });
         try{
             await trainerRepository.save(trainer);
+			await mailController.trainerEmailRegister(trainer, res);
             return res.status(201).json(trainer);
         }
         catch(err){
             return res.status(500).json(err);
         }
     },
-    async index(req: Request, res: Response){
+    async index(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -51,7 +56,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(req: Request, res: Response){
+    async findAll(res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
             const trainers = await trainerRepository.find({
@@ -62,7 +67,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async updateTrainer(req: Request, res: Response){
+    async updateTrainer(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -75,7 +80,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async deleteTrainer(req:Request, res: Response){
+    async deleteTrainer(req:Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -86,7 +91,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async buyItem(req: Request, res: Response){
+    async buyItem(req: Request, res: Response): Promise<Response>{
         const itemRepository = getRepository(Item);
         const trainerRepository = getRepository(Trainer);
         try{
@@ -96,13 +101,14 @@ export default{
             trainer.items.push(item);
             await trainerRepository.update(trainer.id,
             trainer);
+			await mailController.trainerEmailBuyItem(trainer, item, res);
             return res.status(200).json(trainer);
         }
         catch(err){
             return res.status(500).json(err);
         }
     },
-    async catchPokemon(req: Request, res: Response){
+    async catchPokemon(req: Request, res: Response): Promise<Response>{
         const pokemonRepository = getRepository(Pokemon);
         const trainerRepository = getRepository(Trainer);
         try{
@@ -112,13 +118,14 @@ export default{
             trainer.pokemon.push(pokemon);
             console.log(trainer);
             await trainerRepository.save(trainer);
+			await mailController.trainerEmailCatchPokemon(trainer, pokemon, res);
             return res.status(200).json(trainer);
         }
         catch(err){
             return res.status(500).json(err);
         }
     },
-    async chooseRival(req: Request, res: Response){
+    async chooseRival(req: Request, res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
             const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
@@ -133,7 +140,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async chooseFavoritePokemon(req: Request, res: Response){
+    async chooseFavoritePokemon(req: Request, res: Response): Promise<Response>{
         const pokemonRepository = getRepository(Pokemon);
         const trainerRepository = getRepository(Trainer);
         try{
@@ -149,7 +156,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async useItem(req: Request, res: Response){
+    async useItem(req: Request, res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
             const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
@@ -164,7 +171,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async transferToProfessor(req: Request, res: Response){
+    async transferToProfessor(req: Request, res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         const pokeId = req.params.pokemonId;
         try{

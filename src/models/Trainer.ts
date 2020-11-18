@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import Item from './Item';
 import Pokemon from './Pokemon';
-import { Length, IsAlpha } from 'class-validator';
+import { Length, IsAlpha, IsEmail } from 'class-validator';
 
 @Entity('trainers')
 export default class  Trainer {
@@ -10,6 +10,9 @@ export default class  Trainer {
     @Column()
     @Length(5, 20)
     name: string;
+	@Column()
+	@IsEmail()
+	email: string;
     @Column()
     @IsAlpha()
     region: string;
