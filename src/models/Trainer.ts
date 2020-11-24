@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToOne, JoinColumn, ManyToOne, BeforeInsert } from 'typeorm';
 import Item from './Item';
 import Pokemon from './Pokemon';
 import { Length, IsAlpha, IsEmail } from 'class-validator';
+import bcrypt from "bcrypt";
 
 @Entity('trainers')
 export default class  Trainer {
@@ -18,6 +19,10 @@ export default class  Trainer {
     region: string;
     @Column()
     password: string;
+	@Column()
+	photo: string;
+	@Column()
+	file: string;
     @ManyToMany(() => Item)
     @JoinTable({ name: "item_trainer", joinColumn:{
             name: 'trainerId',
@@ -44,4 +49,8 @@ export default class  Trainer {
     pokemon: Pokemon[];
     @ManyToOne(() => Pokemon, pokemon => pokemon.trainer)
     favoritePokemon: Pokemon;
+	@BeforeInsert()
+   	async hashPassword(){
+	   this.password = await bcrypt.hash(this.password, 12);
+   	}
 }

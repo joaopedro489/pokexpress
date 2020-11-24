@@ -18,6 +18,8 @@ export default class  Pokemon {
     @Column()
     @IsPositive()
     speed: number;
+	@Column()
+	photo: string;
     @OneToMany(() => Trainer, trainer => trainer.favoritePokemon)
     master: Trainer[];
 	@ManyToMany(() => Trainer, trainer => trainer.pokemon)

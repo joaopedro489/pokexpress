@@ -29,7 +29,12 @@ export class createPokemon1603339690269 implements MigrationInterface {
                 {
                     name:'speed',
                     type:'integer'
-                }
+                },
+				{
+					name:"photo",
+					type: 'varchar',
+					isNullable: true
+				}
             ]
         }));
 

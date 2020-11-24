@@ -21,7 +21,12 @@ export class createItems1603339773229 implements MigrationInterface {
                 {
                     name:'price',
                     type:'double'
-                }
+                },
+				{
+					name:"photo",
+					type: 'varchar',
+					isNullable: true
+				}
             ]
         }));
 

@@ -4,7 +4,11 @@ import Item from '../models/Item';
 import { validate } from 'class-validator';
 export default{
     async createItem(req: Request, res: Response): Promise<Response>{
-        const{
+		//const requestImage = await req.file as Express.Multer.File;
+		//console.log(requestImage);
+		//return res.status(200).json("olas mundos");
+
+		const{
             name,
             price
         } = req.body;

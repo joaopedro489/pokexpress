@@ -19,7 +19,7 @@ export class createTrainers1603340545691 implements MigrationInterface {
                     type: 'varchar'
                 },
 				{
-                    name: 'name',
+                    name: 'email',
                     type: 'varchar',
 					isUnique: true
                 },
@@ -31,6 +31,16 @@ export class createTrainers1603340545691 implements MigrationInterface {
                     name:'password',
                     type:'varchar'
                 },
+				{
+					name:"photo",
+					type: 'varchar',
+					isNullable: true
+				},
+				{
+					name:"file",
+					type: 'varchar',
+					isNullable: true
+				},
 				{
 					name:"trainerId",
 					type: 'integer',

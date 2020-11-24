@@ -84,5 +84,5 @@ export default{
         catch(err){
             return res.status(500).json(err);
         }
-    }
+    },
 }

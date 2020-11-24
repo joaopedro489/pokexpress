@@ -7,8 +7,8 @@ import mailController from "./mailController";
 import { validate } from 'class-validator';
 
 export default{
-    async createTrainer(req: Request, res: Response): Promise<Response>{
-        const{
+    async createTrainer(req: Request, res: Response){
+		const{
             name,
             region,
             password,
@@ -44,19 +44,20 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async index(req: Request, res: Response): Promise<Response>{
+    async index(req: Request, res: Response){
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
             const trainer = await trainerRepository.findOneOrFail(id,
                 { relations: ["pokemon", "favoritePokemon", "trainer", "items"] } );
+
             return res.status(200).json(trainer);
         }
         catch(err){
             return res.status(500).json(err);
         }
     },
-    async findAll(res: Response): Promise<Response>{
+    async findAll(req: Request,res: Response){
         const trainerRepository = getRepository(Trainer);
         try{
             const trainers = await trainerRepository.find({
@@ -67,8 +68,8 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async updateTrainer(req: Request, res: Response): Promise<Response>{
-        const { id } = req.params;
+    async updateTrainer(req: Request, res: Response){
+        const { id } = req.body.id;
         const trainerRepository = getRepository(Trainer);
         try{
             await trainerRepository.update(id,
@@ -80,7 +81,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async deleteTrainer(req:Request, res: Response): Promise<Response>{
+    async deleteTrainer(req:Request, res: Response){
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -95,7 +96,7 @@ export default{
         const itemRepository = getRepository(Item);
         const trainerRepository = getRepository(Trainer);
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                 { relations: ["items"] } );
             const item = await itemRepository.findOneOrFail(req.params.itemId);
             trainer.items.push(item);
@@ -112,7 +113,7 @@ export default{
         const pokemonRepository = getRepository(Pokemon);
         const trainerRepository = getRepository(Trainer);
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                  { relations: ["pokemon"] } );
             const pokemon = await pokemonRepository.findOneOrFail(req.params.pokemonId);
             trainer.pokemon.push(pokemon);
@@ -128,7 +129,7 @@ export default{
     async chooseRival(req: Request, res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                  { relations: [ "trainer"] } );
             const rival = await trainerRepository.findOneOrFail(req.params.rivalId);
             trainer.trainer = rival;
@@ -144,7 +145,7 @@ export default{
         const pokemonRepository = getRepository(Pokemon);
         const trainerRepository = getRepository(Trainer);
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                 { relations: ["favoritePokemon"] } );
             const pokemon = await pokemonRepository.findOneOrFail(req.params.pokemonId);
             trainer.favoritePokemon = pokemon;
@@ -159,7 +160,7 @@ export default{
     async useItem(req: Request, res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                 { relations: [ "items"] } );
             trainer.items = trainer.items.filter(item => {
                 item.id !== Number(req.params.itemId)
@@ -175,7 +176,7 @@ export default{
         const trainerRepository = getRepository(Trainer);
         const pokeId = req.params.pokemonId;
         try{
-            const trainer = await trainerRepository.findOneOrFail(req.params.trainerId,
+            const trainer = await trainerRepository.findOneOrFail(req.body.id,
                 { relations: [ "pokemon"] } );
             trainer.pokemon = trainer.pokemon.filter(pokemon => {
                 return pokemon.id !== Number(pokeId);
