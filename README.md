@@ -15,6 +15,8 @@ Utilizando o node será possível instalar as dependências do projeto utilizand
 executar as migrations e depois, se preferir, povoar o bando de dados, para isso pode-se utilizar os dois comandos seguinte:
 * `npm run typeorm migration:run`
 * `npm run seed:run`
+
+
   Para finalizar, para servir o projeto basta utilizar o seguinte comando:
 * `npm run dev`
 
