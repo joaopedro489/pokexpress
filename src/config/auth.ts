@@ -1,4 +1,3 @@
-
 class Auth{
 	secret = "abc123!";
 }

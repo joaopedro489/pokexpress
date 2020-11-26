@@ -19,10 +19,11 @@ var allUploads = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'file', 
 //Rotas treinador
 router.get('/trainer/:id', trainerController.index);
 router.get('/trainers', trainerController.findAll);
+router.get('/private/details', authController.getDetails);
 router.post('/trainer/create', allUploads, trainerController.createTrainer);
 router.post('/login', authController.login);
-router.put('/trainer/update/:id', allUploads, trainerController.updateTrainer);
-router.delete('/trainer/delete/:id', trainerController.deleteTrainer);
+router.put('/private/trainer/update', allUploads, trainerController.updateTrainer);
+router.delete('/private/trainer/delete', trainerController.deleteTrainer);
 
 //Rotas itens
 router.get('/item/:id', itemController.index);

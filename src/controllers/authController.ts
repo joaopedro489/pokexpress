@@ -19,5 +19,16 @@ export default{
 		} catch (err){
 			return res.status(500).json(err);
 		}
+	},
+	async getDetails(req: Request, res: Response){
+		const trainerRepository = getRepository(Trainer);
+		try{
+			const trainer = await trainerRepository.findOneOrFail(req.body.id, {
+				relations: ["pokemon", "favoritePokemon", "trainer", "items"]
+			});
+			return res.status(200).json(trainer);
+		} catch (err){
+			return res.status(500).json(err);
+		}
 	}
 }

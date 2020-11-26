@@ -7,7 +7,7 @@ import mailController from "./mailController";
 import { validate } from 'class-validator';
 
 export default{
-    async createTrainer(req: Request, res: Response){
+    async createTrainer(req: Request, res: Response): Promise<Response>{
 		const{
             name,
             region,
@@ -44,7 +44,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async index(req: Request, res: Response){
+    async index(req: Request, res: Response): Promise<Response>{
         const { id } = req.params;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -57,7 +57,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(req: Request,res: Response){
+    async findAll(req: Request,res: Response): Promise<Response>{
         const trainerRepository = getRepository(Trainer);
         try{
             const trainers = await trainerRepository.find({
@@ -68,7 +68,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async updateTrainer(req: Request, res: Response){
+    async updateTrainer(req: Request, res: Response): Promise<Response>{
         const { id } = req.body.id;
         const trainerRepository = getRepository(Trainer);
         try{
@@ -81,8 +81,8 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async deleteTrainer(req:Request, res: Response){
-        const { id } = req.params;
+    async deleteTrainer(req:Request, res: Response): Promise<Response>{
+        const { id } = req.body.id;
         const trainerRepository = getRepository(Trainer);
         try{
             await trainerRepository.delete(id);
