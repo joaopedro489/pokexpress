@@ -10,7 +10,8 @@ Utilizando a ferramenta git será possível baixar o projeto utilizando o seguin
 ## Como executar o projeto?
 Utilizando o node será possível instalar as dependências do projeto utilizando o comando pelo terminal (dentro da pasta do projeto):
 * `npm install`
-Logo após o término das instalações das dependências será necessário montar o bando de dados. Para isso primeiro será necessário 
+
+  Logo após o término das instalações das dependências será necessário montar o bando de dados. Para isso primeiro será necessário 
 executar as migrations e depois, se preferir, povoar o bando de dados, para isso pode-se utilizar os dois comandos seguinte:
 * `npm run typeorm migration:run`
 * `npm run seed:run`
