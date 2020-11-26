@@ -20,8 +20,8 @@ export default class  Pokemon {
     speed: number;
 	@Column()
 	photo: string;
-    @OneToMany(() => Trainer, trainer => trainer.favoritePokemon)
+    @OneToMany(() => Trainer, trainer => trainer.favoritePokemon,{ onDelete: 'SET NULL' })
     master: Trainer[];
-	@ManyToMany(() => Trainer, trainer => trainer.pokemon)
+	@ManyToMany(() => Trainer, trainer => trainer.pokemon, { onDelete: 'CASCADE' })
     trainer: Trainer[];
 }

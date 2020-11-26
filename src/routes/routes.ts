@@ -13,9 +13,11 @@ const upload = multer({ storage: File.storage });
 
 //exemplo de middleware
 router.use('/trainer', example);
-router.use("/private", authentication);
+router.use('/private', authentication);
 
+//múltiplos uploads
 var allUploads = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'file', maxCount: 1 }]);
+
 //Rotas treinador
 router.get('/trainer/:id', trainerController.index);
 router.get('/trainers', trainerController.findAll);
@@ -28,8 +30,8 @@ router.delete('/private/trainer/delete', trainerController.deleteTrainer);
 //Rotas itens
 router.get('/item/:id', itemController.index);
 router.get('/items', itemController.findAll);
-router.post('/item/create', upload.single('photo'), itemController.createItem);
-router.put('/item/update/:id', upload.single('photo'), itemController.updateItem);
+router.post('/item/create', itemController.createItem);
+router.put('/item/update/:id', itemController.updateItem);
 router.delete('/item/delete/:id', itemController.deleteItem);
 
 //Rotas pokemons
@@ -43,7 +45,7 @@ router.delete('/pokemon/delete/:id', pokemonController.deletePokemon);
 router.put('/private/pokemon/:pokemonId', trainerController.chooseFavoritePokemon);
 router.put('/private/pokemons/:pokemonId', trainerController.catchPokemon);
 router.put('/private/rival/:rivalId', trainerController.chooseRival);
-router.put('private/item/:itemId', trainerController.buyItem);
+router.put('/private/item/:itemId', trainerController.buyItem);
 router.delete('/private/item/:itemId', trainerController.useItem);
 router.delete('/private/pokemon/:pokemonId', trainerController.transferToProfessor);
 

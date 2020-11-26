@@ -4,10 +4,10 @@ import { Request } from 'express';
 class File{
 	storage = multer.diskStorage({
         destination: path.join(__dirname, '..', 'uploads'),
-        filename: (req: Request, file, cb) => {
-            const fileName = `${file.originalname}-${Date.now()}`;
+        filename: (request: Request, file, callback) => {
+            const fileName = `${Date.now()}-${file.originalname}`;
 
-            cb(null, fileName);
+            callback(null, fileName);
         },
     });
 }

@@ -23,7 +23,7 @@ export default class  Trainer {
 	photo: string;
 	@Column()
 	file: string;
-    @ManyToMany(() => Item)
+    @ManyToMany(() => Item, { onDelete: 'CASCADE' })
     @JoinTable({ name: "item_trainer", joinColumn:{
             name: 'trainerId',
             referencedColumnName: 'id'
@@ -37,7 +37,7 @@ export default class  Trainer {
     @OneToOne(() => Trainer)
     @JoinColumn()
     trainer: Trainer;
-    @ManyToMany(() => Pokemon)
+    @ManyToMany(() => Pokemon, { onDelete: 'CASCADE' })
     @JoinTable({ name: "pokemon_trainer", joinColumn: {
             name: 'trainerId',
             referencedColumnName: 'id'
@@ -48,7 +48,7 @@ export default class  Trainer {
         }})
     pokemon: Pokemon[];
     @ManyToOne(() => Pokemon, pokemon => pokemon.trainer)
-    favoritePokemon: Pokemon;
+    favoritePokemon: Pokemon | null;
 	@BeforeInsert()
    	async hashPassword(){
 	   this.password = await bcrypt.hash(this.password, 12);

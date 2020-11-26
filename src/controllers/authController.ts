@@ -23,7 +23,7 @@ export default{
 	async getDetails(req: Request, res: Response){
 		const trainerRepository = getRepository(Trainer);
 		try{
-			const trainer = await trainerRepository.findOneOrFail(req.body.id, {
+			const trainer = await trainerRepository.findOneOrFail(req.id, {
 				relations: ["pokemon", "favoritePokemon", "trainer", "items"]
 			});
 			return res.status(200).json(trainer);

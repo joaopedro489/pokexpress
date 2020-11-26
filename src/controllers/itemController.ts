@@ -4,31 +4,23 @@ import Item from '../models/Item';
 import { validate } from 'class-validator';
 export default{
     async createItem(req: Request, res: Response): Promise<Response>{
-		//const requestImage = await req.file as Express.Multer.File;
-		//console.log(requestImage);
-		//return res.status(200).json("olas mundos");
-
 		const{
             name,
             price
         } = req.body;
-        let validatorItem = new Item();
-        validatorItem.name = name;
-        validatorItem.price = price;
+        let item = new Item();
+        item.name = name;
+        item.price = Number(price);
         try{
-            const errors = await validate(validatorItem);
+            const errors = await validate(item);
             if (errors.length > 0) {
-                throw new Error(`Validation failed!`);
+                throw errors;
             }
         }
         catch (err){
-            return res.status(500).json(err);
+            return res.status(500).json(err + " ");
         }
         const itemRepository = getRepository(Item);
-        const item = itemRepository.create({
-            name,
-            price
-        });
         try{
             await itemRepository.save(item);
         }
@@ -48,7 +40,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(res: Response): Promise<Response>{
+    async findAll(req: Request, res: Response): Promise<Response>{
         const itemRepository = getRepository(Item);
         try{
             const items = await itemRepository.find();
@@ -62,9 +54,24 @@ export default{
         const { id } = req.params;
         const itemRepository = getRepository(Item);
         try{
-            await itemRepository.update(id,
-            req.body);
+
             const item = await itemRepository.findOneOrFail(id);
+			if(req.body.name){
+				item.name = req.body.name;
+			}
+			if(req.body.price){
+				item.price = Number(req.body.price);
+			}
+			try{
+	            const errors = await validate(item);
+	            if (errors.length > 0) {
+	                throw errors;
+	            }
+	        }
+	        catch (err){
+	            return res.status(500).json(err + " ");
+	        }
+			await itemRepository.save(item);
             return res.status(200).json(item);
         }
         catch(err){
@@ -76,12 +83,10 @@ export default{
         const itemRepository = getRepository(Item);
         try{
             await itemRepository.delete(id);
-            return res.status(204);
+            return res.status(204).json("");
         }
         catch(err){
             return res.status(500).json(err);
         }
-    },
-
-
+    }
 }

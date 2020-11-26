@@ -59,11 +59,13 @@ export class createTrainers1603340545691 implements MigrationInterface {
 			columnNames: ["favoritePokemonId"],
 			referencedColumnNames: ["id"],
 			referencedTableName: "pokemon",
+			onDelete: "SET NULL"
 		}));
 		await queryRunner.createForeignKey("trainers", new TableForeignKey({
 			columnNames: ["trainerId"],
 			referencedColumnNames: ["id"],
 			referencedTableName: "trainers",
+			onDelete: "SET NULL"
 		}));
     }
 

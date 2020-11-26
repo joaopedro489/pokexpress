@@ -11,9 +11,6 @@ export default class  Item {
     @Column()
     @IsPositive()
     price: number;
-	@Column()
-	photo: string;
-    @ManyToMany(() => Trainer, trainer => trainer.items)
+    @ManyToMany(() => Trainer, trainer => trainer.items, { onDelete: 'CASCADE' })
     trainers: Trainer[];
-	cascade: ['insert','update', 'remove'];
 }

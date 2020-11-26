@@ -5,33 +5,30 @@ import { validate } from 'class-validator';
 
 export default{
     async createPokemon(req: Request, res: Response): Promise<Response>{
-        const{
+		const{
             name,
             atk,
             hp,
             speed
         } = req.body;
-        let validatorPokemon= new Pokemon();
-        validatorPokemon.name = name;
-        validatorPokemon.atk = atk;
-        validatorPokemon.hp = hp;
-        validatorPokemon.speed = speed;
+        let pokemon= new Pokemon();
+        pokemon.name = name;
+        pokemon.atk = Number(atk);
+        pokemon.hp = Number(hp);
+        pokemon.speed = Number(speed);
         try{
-            const errors = await validate(validatorPokemon);
+            const errors = await validate(pokemon);
             if (errors.length > 0) {
-                throw new Error(`Validation failed!`);
+                throw errors;
             }
         }
         catch (err){
-            return res.status(500).json("Validator Erros");
+            return res.status(500).json(err + "");
         }
         const pokemonRepository = getRepository(Pokemon);
-        const pokemon = pokemonRepository.create({
-            name,
-            atk,
-            hp,
-            speed
-        });
+		if(req.file){
+			pokemon.photo = "http://localhost:3335/uploads/" + req.file.filename;
+		}
         try{
             await pokemonRepository.save(pokemon);
         }
@@ -51,7 +48,7 @@ export default{
             return res.status(500).json(err);
         }
     },
-    async findAll(res: Response): Promise<Response>{
+    async findAll(req:Request, res: Response): Promise<Response>{
         const pokemonRepository = getRepository(Pokemon);
         try{
             const pokemons = await pokemonRepository.find();
@@ -65,9 +62,32 @@ export default{
         const { id } = req.params;
         const pokemonRepository = getRepository(Pokemon);
         try{
-            await pokemonRepository.update(id,
-            req.body);
-            const pokemon = await pokemonRepository.findOneOrFail(id);
+			const pokemon = await pokemonRepository.findOneOrFail(id);
+			if(req.file){
+				pokemon.photo = "http://localhost:3335/uploads/" + req.file.filename;
+			}
+			if(req.body.name){
+				pokemon.name = req.body.name;
+			}
+			if(req.body.atk){
+				pokemon.atk = Number(req.body.atk);
+			}
+			if(req.body.hp){
+				pokemon.hp = Number(req.body.hp);
+			}
+			if(req.body.speed){
+				pokemon.speed = Number(req.body.speed);
+			}
+			try{
+	            const errors = await validate(pokemon);
+	            if (errors.length > 0) {
+	                throw errors;
+	            }
+	        }
+	        catch (err){
+	            return res.status(500).json(err + "");
+	        }
+            await pokemonRepository.save(pokemon);
             return res.status(200).json(pokemon);
         }
         catch(err){
@@ -79,10 +99,10 @@ export default{
         const pokemonRepository = getRepository(Pokemon);
         try{
             await pokemonRepository.delete(id);
-            return res.status(204);
+            return res.status(204).json("");
         }
         catch(err){
             return res.status(500).json(err);
         }
-    },
+    }
 }
